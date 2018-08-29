@@ -11,9 +11,11 @@ import UIKit
 class ViewController: UIViewController {
 
     let _gameController = GameController()
+    var _gameRangeToScreenRation:CGFloat = 1
     
     static let BORDER_MARGIN:CGFloat = 16
     
+    @IBOutlet weak var ui_boundaryZone: UIView!
     @IBOutlet weak var ui_highLabel: UILabel!
     @IBOutlet weak var ui_lowLabel: UILabel!
     @IBOutlet weak var ui_checkValueButton: UIButton!
@@ -44,26 +46,46 @@ class ViewController: UIViewController {
     
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
-        updateDisplay()
+        let barWidth:CGFloat = self.view.bounds.width
+            - self.view.safeAreaInsets.left
+            - self.view.safeAreaInsets.right
+            - 2 * ViewController.BORDER_MARGIN
+        _gameRangeToScreenRation = barWidth / CGFloat((GameController.MAX_VALUE - GameController.MIN_VALUE))
+        
     }
     
     func updateDisplay(){
         if _gameController.isGameInProgress {
-            let barWidth:CGFloat = self.view.bounds.width
-                - self.view.safeAreaInsets.left
-                - self.view.safeAreaInsets.right
-                - 2 * ViewController.BORDER_MARGIN
-            let gameRangeToScreenRation = barWidth / CGFloat((GameController.MAX_VALUE - GameController.MIN_VALUE))
+            if ui_boundaryZone.isHidden != false {
+                UIView.transition(with: ui_boundaryZone, duration: 0.3, options: [.transitionCurlDown], animations: {
+                    self.ui_boundaryZone.isHidden = false
+                    self.ui_gameStatusLabel.text = "Essayez de trouver me nombre mystère"
+                    self.displayUiGuess(hidden: false)
+                    UIView.animate(withDuration: 0.4) {
+                        self.view.layoutIfNeeded()
+                    }
+                }, completion: nil)
+            }
             
-            ui_gameStatusLabel.text = "Essayez de trouver me nombre mystère"
-            displayUiGuess(hidden: false)
             ui_lowLabel.text = String(_gameController.lowBoundary)
             ui_highLabel.text = String(_gameController.highBoundary)
-            cs_boundaryZoneLeading.constant = ViewController.BORDER_MARGIN + CGFloat(_gameController.lowBoundary) * gameRangeToScreenRation
-            cs_boundaryZoneTrailing.constant = ViewController.BORDER_MARGIN + CGFloat(GameController.MAX_VALUE - _gameController.highBoundary) * gameRangeToScreenRation
+            
+            cs_boundaryZoneLeading.constant = ViewController.BORDER_MARGIN + CGFloat(_gameController.lowBoundary) * _gameRangeToScreenRation
+            cs_boundaryZoneTrailing.constant = ViewController.BORDER_MARGIN + CGFloat(GameController.MAX_VALUE - _gameController.highBoundary) * _gameRangeToScreenRation
+            
+
+            
+            UIView.animate(withDuration: 0.6, delay: 0, usingSpringWithDamping: 0.45, initialSpringVelocity: 10, options: [], animations: {
+                self.view.layoutIfNeeded()
+            }, completion: nil)
         } else {
             ui_gameStatusLabel.text = nil
             displayUiGuess(hidden: true)
+            if ui_boundaryZone.isHidden != true {
+                UIView.transition(with: ui_boundaryZone, duration: 0.3, options: [.transitionCurlUp], animations: {
+                    self.ui_boundaryZone.isHidden = true
+                }, completion: nil)
+            }
         }
     }
     
@@ -80,6 +102,7 @@ class ViewController: UIViewController {
         if let guessText = ui_guessdValueField.text,
             let guesInt = Int(guessText){
             _gameController.checkGuessedValue(guesInt)
+            ui_guessdValueField.text = nil
             updateDisplay()
         }
     }

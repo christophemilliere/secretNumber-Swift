@@ -25,7 +25,7 @@
                                         <rect key="frame" x="0.0" y="0.0" width="174" height="30"/>
                                         <nil key="textColor"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <textInputTraits key="textInputTraits"/>
+                                        <textInputTraits key="textInputTraits" keyboardType="numberPad"/>
                                     </textField>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="76n-gk-FwE">
                                         <rect key="frame" x="190" y="0.0" width="49" height="30"/>
@@ -107,6 +107,7 @@
                     <connections>
                         <outlet property="cs_boundaryZoneLeading" destination="pCq-PU-vLu" id="tlV-Qb-1VD"/>
                         <outlet property="cs_boundaryZoneTrailing" destination="u8z-jd-Q2O" id="EuI-as-Tz3"/>
+                        <outlet property="ui_boundaryZone" destination="RNL-us-jDO" id="6zv-o1-l0u"/>
                         <outlet property="ui_checkValueButton" destination="76n-gk-FwE" id="wSx-ZK-757"/>
                         <outlet property="ui_gameStatusLabel" destination="eQB-Pn-g0Z" id="05J-RN-Fr2"/>
                         <outlet property="ui_guessdValueField" destination="CXQ-u1-vBq" id="IDs-ih-pfu"/>
