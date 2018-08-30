@@ -13,8 +13,6 @@ class ViewController: UIViewController {
     let _gameController = GameController()
     var _gameRangeToScreenRation:CGFloat = 1
     
-    static let BORDER_MARGIN:CGFloat = 16
-    
     @IBOutlet weak var ui_boundaryZone: UIView!
     @IBOutlet weak var ui_highLabel: UILabel!
     @IBOutlet weak var ui_lowLabel: UILabel!
@@ -22,17 +20,9 @@ class ViewController: UIViewController {
     @IBOutlet weak var ui_gameStatusLabel: UILabel!
     @IBOutlet weak var ui_guessdValueField: UITextField!
     
-    @IBOutlet weak var cs_boundaryZoneLeading: NSLayoutConstraint! {
-        didSet{
-           cs_boundaryZoneLeading.constant = ViewController.BORDER_MARGIN
-        }
-    }
+    @IBOutlet weak var cs_boundaryZoneLeading: NSLayoutConstraint!
+    @IBOutlet weak var cs_boundaryZoneTrailing: NSLayoutConstraint!
     
-    @IBOutlet weak var cs_boundaryZoneTrailing: NSLayoutConstraint! {
-        didSet {
-            cs_boundaryZoneTrailing.constant = ViewController.BORDER_MARGIN
-        }
-    }
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
@@ -44,12 +34,9 @@ class ViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    override func viewWillLayoutSubviews() {
-        super.viewWillLayoutSubviews()
-        let barWidth:CGFloat = self.view.bounds.width
-            - self.view.safeAreaInsets.left
-            - self.view.safeAreaInsets.right
-            - 2 * ViewController.BORDER_MARGIN
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        let barWidth:CGFloat = self.ui_boundaryZone.bounds.width
         _gameRangeToScreenRation = barWidth / CGFloat((GameController.MAX_VALUE - GameController.MIN_VALUE))
         
     }
@@ -70,8 +57,8 @@ class ViewController: UIViewController {
             ui_lowLabel.text = String(_gameController.lowBoundary)
             ui_highLabel.text = String(_gameController.highBoundary)
             
-            cs_boundaryZoneLeading.constant = ViewController.BORDER_MARGIN + CGFloat(_gameController.lowBoundary) * _gameRangeToScreenRation
-            cs_boundaryZoneTrailing.constant = ViewController.BORDER_MARGIN + CGFloat(GameController.MAX_VALUE - _gameController.highBoundary) * _gameRangeToScreenRation
+            cs_boundaryZoneLeading.constant = CGFloat(_gameController.lowBoundary) * _gameRangeToScreenRation
+            cs_boundaryZoneTrailing.constant = CGFloat(GameController.MAX_VALUE - _gameController.highBoundary) * _gameRangeToScreenRation
             
 
             

@@ -38,10 +38,13 @@ class GameController {
         if secretNumber != nil {
             _sercretNumber = secretNumber
         } else {
-            _sercretNumber = 50
+            _sercretNumber = Int(withRandomNumbersBetween: GameController.MIN_VALUE, and: GameController.MAX_VALUE)
+            print(_sercretNumber)
         }
         
         _lastGuessValue = nil
+        _lowBoundary = GameController.MIN_VALUE
+        _highBoundary = GameController.MAX_VALUE
     }
     
     func checkGuessedValue(_ value:Int) {

@@ -59,6 +59,10 @@ class GameControllerTests: XCTestCase {
         gameController.checkGuessedValue(65)
         XCTAssertEqual(55, gameController.lowBoundary)
         XCTAssertEqual(65, gameController.highBoundary)
+        
+        gameController.startNewGame()
+        XCTAssertEqual(GameController.MIN_VALUE, gameController.lowBoundary)
+        XCTAssertEqual(GameController.MAX_VALUE, gameController.highBoundary)
 
     }
 }
